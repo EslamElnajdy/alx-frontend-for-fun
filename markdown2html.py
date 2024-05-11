@@ -11,6 +11,7 @@ import sys
 import os
 import re
 
+
 def convert_heading(line):
     if line.startswith("#"):
         match = re.match(r'^(#+)\s*(.+)$', line)
@@ -18,6 +19,13 @@ def convert_heading(line):
             count = len(match.group(1))
             return f"<h{count}>{match.group(2).strip()}</h{count}>"
     return line
+
+
+def convert_unorderedList(line=''):
+    if line.startswith("- "):
+        match = re.match(r'^(-)\s*(.+)$', line)
+        if match:
+            return f"   <li>{match.group(2)}</li>"
 
 
 def main():
@@ -41,13 +49,28 @@ def main():
         lines = f.readlines()
 
     for line in lines:
-        converted_line = convert_heading(line)
+        prev_line = lines[lines.index(line) - 1].startswith("- ")
+        if (line.startswith("- ")) and not prev_line:
+            converted_lines.append("<ul>")
+
+        if line.startswith("#"):
+            converted_line = convert_heading(line)
+
+        if line.startswith("- "):
+            converted_line = convert_unorderedList(line)
+
         converted_lines.append(converted_line)
+
+        if line.startswith("- "):
+            if lines.index(line) + 1 == len(lines):
+                converted_lines.append("</ul>")
+            elif lines.index(line) + 1 != len(lines):
+                if not lines[lines.index(line) + 1].startswith("- "):
+                    converted_lines.append("</ul>")
 
     with open(html_file, "w") as html:
         html.write("\n".join(converted_lines))
         html.write("\n")
-
 
     sys.exit(0)
 
