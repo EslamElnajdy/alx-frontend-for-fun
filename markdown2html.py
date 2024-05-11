@@ -25,7 +25,7 @@ def convert_unorderedList(line=''):
     if line.startswith("- "):
         match = re.match(r'^(-)\s*(.+)$', line)
         if match:
-            return f"   <li>{match.group(2)}</li>"
+            return f"<li>{match.group(2)}</li>"
 
 
 def main():
@@ -67,7 +67,7 @@ def main():
             elif lines.index(line) + 1 != len(lines):
                 if not lines[lines.index(line) + 1].startswith("- "):
                     converted_lines.append("</ul>")
-
+    print(converted_lines)
     with open(html_file, "w") as html:
         html.write("\n".join(converted_lines))
         html.write("\n")
