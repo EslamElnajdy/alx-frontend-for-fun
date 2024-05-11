@@ -1,34 +1,62 @@
 #!/usr/bin/python3
 
 """
-script markdown2html.py that takes an argument 2 strings:
-    - First argument is the name of the Markdown file
-    - Second argument is the output file name
+module
 """
-
-
 import sys
 import os
 import re
 
 
-def convert_heading(line):
-    if line.startswith("#"):
+def convert_heading(line=''):
+    """ fn """
+    if (line.startswith("#")):
         match = re.match(r'^(#+)\s*(.+)$', line)
         if match:
-            count = len(match.group(1))
+            count = min(len(match.group(1)), 6)
             return f"<h{count}>{match.group(2).strip()}</h{count}>"
     return line
 
 
-def convert_unorderedList(line=''):
-    if line.startswith("- "):
-        match = re.match(r'^(-)\s*(.+)$', line)
-        if match:
-            return f"<li>{match.group(2)}</li>"
+def convert_unordered_list(lines=''):
+    """ fn """
+    converted_list = []
+    in_list = False
+
+    for line in lines:
+        if line.startswith("- "):
+            if not in_list:
+                converted_list.append("<ul>")
+                in_list = True
+            converted_list.append(f"<li>{line.strip('- ').strip()}</li>")
+        else:
+            if in_list:
+                converted_list.append("</ul>")
+                in_list = False
+            converted_list.append(line)
+
+    if in_list:
+        converted_list.append("</ul>")
+
+    return converted_list
+
+
+def convert_to_html(markdown_file, html_file):
+    """ fn """
+    with open(markdown_file, "r") as md:
+        lines = md.readlines()
+        converted_lines = [convert_heading(line) for line in lines]
+        converted_lines = convert_unordered_list(converted_lines)
+
+    with open(html_file, "w") as html:
+        for line in converted_lines:
+            html.write(line + "\n")
 
 
 def main():
+    """
+    fn
+    """
     if len(sys.argv) < 3:
         print("Usage: ./markdown2html.py README.md README.html",
               file=sys.stderr)
@@ -41,37 +69,7 @@ def main():
         print(f"Missing {markdown_file}", file=sys.stderr)
         sys.exit(1)
 
-    # open the file markdown
-    lines = []
-    converted_lines = []
-
-    with open(markdown_file, "r") as f:
-        lines = f.readlines()
-
-    for line in lines:
-        prev_line = lines[lines.index(line) - 1].startswith("- ")
-        if (line.startswith("- ")) and not prev_line:
-            converted_lines.append("<ul>")
-
-        if line.startswith("#"):
-            converted_line = convert_heading(line)
-
-        if line.startswith("- "):
-            converted_line = convert_unorderedList(line)
-
-        converted_lines.append(converted_line)
-
-        if line.startswith("- "):
-            if lines.index(line) + 1 == len(lines):
-                converted_lines.append("</ul>")
-            elif lines.index(line) + 1 != len(lines):
-                if not lines[lines.index(line) + 1].startswith("- "):
-                    converted_lines.append("</ul>")
-    print(converted_lines)
-    with open(html_file, "w") as html:
-        html.write("\n".join(converted_lines))
-        html.write("\n")
-
+    convert_to_html(markdown_file, html_file)
     sys.exit(0)
 
 
