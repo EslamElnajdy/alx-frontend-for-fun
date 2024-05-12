@@ -40,6 +40,28 @@ def convert_unordered_list(lines=''):
 
     return converted_list
 
+def convert_ordered_list(lines):
+    """ fn """
+    converted_list = []
+    in_list = False
+
+    for line in lines:
+        if line.startswith("* "):
+            if not in_list:
+                converted_list.append("<ol>")
+                in_list = True
+            converted_list.append(f"<li>{line.strip('* ').strip()}</li>")
+        else:
+            if in_list:
+                converted_list.append("</ol>")
+                in_list = False
+            converted_list.append(line)
+
+    if in_list:
+        converted_list.append("</ol>")
+
+    return converted_list
+
 
 def convert_to_html(markdown_file, html_file):
     """ fn """
@@ -47,6 +69,7 @@ def convert_to_html(markdown_file, html_file):
         lines = md.readlines()
         converted_lines = [convert_heading(line) for line in lines]
         converted_lines = convert_unordered_list(converted_lines)
+        converted_lines = convert_ordered_list(converted_lines)
 
     with open(html_file, "w") as html:
         for line in converted_lines:
