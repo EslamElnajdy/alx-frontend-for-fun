@@ -12,6 +12,7 @@ def convert_bold(line):
     """ fn """
     new_line = []
     in_bold = False
+    in_emphasis = False
     i = 0
 
     while i < len(line):
@@ -23,11 +24,11 @@ def convert_bold(line):
                     in_bold = True
                 i += 2
         elif line[i:i+2] == "__":
-                if in_bold:
+                if in_emphasis:
                     new_line.append("</em>")
                 else:
                     new_line.append("<em>")
-                    in_bold = True
+                    in_emphasis = True
                 i += 2
         else:
             new_line.append(line[i])
