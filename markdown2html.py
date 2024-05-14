@@ -96,8 +96,8 @@ def convert_paragraph(lines):
     br = False
 
     for line in lines:
-        line = convert_bold(line)
         if not line.startswith("<"):
+            line = convert_bold(line)
             if line.strip() == "":
                 if in_paragraph:
                     converted_list.append("</p>")
