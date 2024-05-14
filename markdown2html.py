@@ -6,6 +6,7 @@ module
 import sys
 import os
 import re
+import hashlib
 
 
 def convert_bold(line):
@@ -16,7 +17,23 @@ def convert_bold(line):
     i = 0
 
     while i < len(line):
-        if line[i:i+2] == "**":
+        if line[i:i+2] == "[[" and "]]" in line[i:]:
+            start = i + 2
+            end = line.find("]]", start)
+            content = line[start:end]
+            # Convert content to MD5 hash (lowercase)
+            content_hash = hashlib.md5(content.encode()).hexdigest()
+            new_line.append(content_hash)
+            i = end + 2
+        elif line[i:i+2] == "((" and "))" in line[i:]:
+            start = i + 2
+            end = line.find("))", start)
+            content = line[start:end]
+            # Remove all occurrences of 'c' (case insensitive) from content
+            content = content.replace('c', '').replace('C', '')
+            new_line.append(content)
+            i = end + 2
+        elif line[i:i+2] == "**":
                 if in_bold:
                     new_line.append("</b>")
                 else:
