@@ -63,6 +63,35 @@ def convert_ordered_list(lines):
     return converted_list
 
 
+def convert_paragraph(lines):
+    converted_list = []
+    in_paragraph = False
+    br = False
+
+    for line in lines:
+        if not line.startswith("<"):
+            if line.strip() == "":
+                if in_paragraph:
+                    converted_list.append("</p>")
+                    in_paragraph = False
+            else:
+                if in_paragraph:
+                    converted_list.append("<br/>")
+                if not in_paragraph:
+                    converted_list.append("<p>")
+                    in_paragraph = True    
+                converted_list.append(line.strip())
+                
+                
+        else:
+            converted_list.append(line)
+    
+    if in_paragraph:
+        converted_list.append("</p>")
+
+    return converted_list
+
+
 def convert_to_html(markdown_file, html_file):
     """ fn """
     with open(markdown_file, "r") as md:
@@ -70,6 +99,7 @@ def convert_to_html(markdown_file, html_file):
         converted_lines = [convert_heading(line) for line in lines]
         converted_lines = convert_unordered_list(converted_lines)
         converted_lines = convert_ordered_list(converted_lines)
+        converted_lines = convert_paragraph(converted_lines)
 
     with open(html_file, "w") as html:
         for line in converted_lines:
