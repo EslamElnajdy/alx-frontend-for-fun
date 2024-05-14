@@ -126,7 +126,7 @@ def convert_to_html(markdown_file, html_file):
     """ fn """
     with open(markdown_file, "r") as md:
         lines = md.readlines()
-        converted_lines = [convert_heading(line) for line in lines]
+        converted_lines = [convert_heading(convert_bold(line)) for line in lines]
         converted_lines = convert_unordered_list(converted_lines)
         converted_lines = convert_ordered_list(converted_lines)
         converted_lines = convert_paragraph(converted_lines)
