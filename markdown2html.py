@@ -52,6 +52,7 @@ def convert_unordered_list(lines=''):
 
     for line in lines:
         if line.startswith("- "):
+            line = convert_bold(line)
             if not in_list:
                 converted_list.append("<ul>")
                 in_list = True
@@ -74,6 +75,7 @@ def convert_ordered_list(lines):
 
     for line in lines:
         if line.startswith("* "):
+            line = convert_bold(line)
             if not in_list:
                 converted_list.append("<ol>")
                 in_list = True
