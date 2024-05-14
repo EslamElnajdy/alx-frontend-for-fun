@@ -8,6 +8,33 @@ import os
 import re
 
 
+def convert_bold(line):
+    """ fn """
+    new_line = []
+    in_bold = False
+    i = 0
+
+    while i < len(line):
+        if line[i:i+2] == "**":
+                if in_bold:
+                    new_line.append("</b>")
+                else:
+                    new_line.append("<b>")
+                    in_bold = True
+                i += 2
+        elif line[i:i+2] == "__":
+                if in_bold:
+                    new_line.append("</em>")
+                else:
+                    new_line.append("<em>")
+                    in_bold = True
+                i += 2
+        else:
+            new_line.append(line[i])
+            i += 1
+    return "".join(new_line)
+
+
 def convert_heading(line=''):
     """ fn """
     if (line.startswith("#")):
@@ -69,6 +96,7 @@ def convert_paragraph(lines):
     br = False
 
     for line in lines:
+        line = convert_bold(line)
         if not line.startswith("<"):
             if line.strip() == "":
                 if in_paragraph:
