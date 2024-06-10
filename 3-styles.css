@@ -1,0 +1,94 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+body {
+  height: 100vh;
+}
+
+.menu-open {
+  display: none;
+}
+nav {
+  width: 200px;
+  margin: 200px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-open-button {
+  width: 80px;
+  height: 80px;
+  background: red;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: .3s ease;
+}
+
+.menu-open-button .menu-line {
+  width: 30px;
+  height: 3px;
+  background: #fff;
+}
+
+/* menu-item */
+
+.menu-item {
+  width: 50px;
+  height: 50px;
+  background: red;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid red;
+}
+
+i {
+  color: #fff;
+}
+
+.menu-item:hover {
+  background: #fff;
+}
+
+.menu-item:hover i {
+  color: red;
+}
+
+.menu-open:checked + .menu-open-button {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.menu-open:not(:checked) ~ .menu-item {
+  display: none;
+}
+
+.menu-open:checked + .menu-open-button  .menu-line {
+  position: absolute;
+}
+
+.menu-open:checked + .menu-open-button .menu-line-1 {
+  transform: rotate(-45deg);
+  width: 20px;
+}
+.menu-open:checked + .menu-open-button .menu-line-2 {
+  display: none;
+}
+.menu-open:checked + .menu-open-button .menu-line-3 {
+  transform: rotate(45deg);
+  width: 20px;
+}

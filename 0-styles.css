@@ -1,0 +1,53 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+
+}
+
+ul {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  list-style: none;
+  place-items: center;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+li {
+  width: 250px;
+  height: 420px;
+  background-color: #f7f7f7;
+  border: solid 2px #8d8d8d;
+  display: grid;
+  place-items: center;
+  font-size: 2.2rem;
+  font-weight: bold;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 10px;
+}
+
+.icon {
+  width: 270px;
+  height: 375px;
+  background: url(./0-sprite.png);
+  zoom: .8;
+}
+
+.i-html {
+  background-position: -4.5px 0;
+
+}
+
+.i-css {
+  background-position: -293px 0;
+}
+
+.i-js {
+  background-position: -581px 0;
+}
